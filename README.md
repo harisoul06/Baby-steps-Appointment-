@@ -1,73 +1,156 @@
-# Getting Started with Create React App
+BabySteps Assignment
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Below is an enhanced assignment that builds on the basic CRUD appointment tracker but adds more complexity around appointment scheduling and availability. This version is designed to test deeper skills in both backend logic and frontend interactivity, while still being scoped to roughly one day of work.
 
-## Available Scripts
+Assignment: Advanced Babysteps Appointment Booking System
 
-In the project directory, you can run:
+Overview
 
-### `npm start`
+Build a full-stack application using Node.js/Express for the backend, MongoDB for data storage, and React for the frontend. In this version, you will implement an appointment booking system for a prenatal care service where users can view a doctor's available time slots and book appointments accordingly.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+The key challenge is to compute available appointment slots based on the doctor's predefined working hours and existing bookings, preventing double bookings.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Backend Requirements (Node.js + Express + MongoDB):
 
-### `npm test`
+1. Data Models:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+• Doctor:
 
-### `npm run build`
+name (String): Doctor's name.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+workingHours (Object): Define daily working hours (e.g., { start: "09:00", end: "17:00")). For simplicity, assume the same hours for each day.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+(Optional) Additional fields (e.g., specialization).
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+• Appointment:
 
-### `npm run eject`
+doctorId (Objectid): Reference to a Doctor.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+date (Date): Date and time of the appointment.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+duration (Number): Duration in minutes (e.g., 30 or 60).
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+appointment Type (String): E.g., "Routine Check-Up", "Ultrasound", etc.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+patientName (String): Name of the patient.
 
-## Learn More
+notes (String, optional).
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+2. API Endpoints:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Doctor Endpoints:
 
-### Code Splitting
+GET/doctors Retrieve a list of all doctors.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+GET/doctors/:id/slots?date=YYYY-MM-DD Compute and return the available time slots for the specified doctor on the given date. Hint: Use the doctor's working hours and subtract any slots that conflict with existing appointments.
 
-### Analyzing the Bundle Size
+• Appointment Endpoints:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+GET/appointments Retrieve all appointments.
 
-### Making a Progressive Web App
+GET/appointments/:id Retrieve details for a specific appointment.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+POST /appointments Create a new appointment. Important: Before creating.
 
-### Advanced Configuration
+validate that the requested time slot for the given doctor is available (i.e., no overlapping appointments).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+PUT/appointments/:id Update an existing appointment (ensure the updated time slot remains available).
 
-### Deployment
+DELETE /appointments/:id Cancel an appointment.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+3. Additional Backend Considerations:
 
-### `npm run build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-"# Baby-steps-Appointment-" 
-"# Baby-steps-Appointment-" 
-"# Baby-steps-Appointment-" 
+Time Slot Calculation: Use a date library (e.g., date-fns or moment.js) to calculate and compare times. Assume appointments start at fixed intervals (e.g., every 30 minutes).
+
+Validation & Error Handling: Validate all inputs (e.g., required fields, date formats) and handle errors gracefully.
+
+(Optional Extra) Real-Time Updates: Implement a basic WebSocket (or Socket.io) integration so that if an appointment is booked, any open client viewing available slots is notified and their slot list updates automatically.
+
+Frontend Requirements (React):
+
+1. User Interface:
+
+
+• Doctor Selection: Create a page where users can view a list of doctors and select one.
+
+Calendar/Slot View: After selecting a doctor, display a calendar or date picker for the upcoming 7 days. For a selected date, show available time slots computed from the
+
+backend.
+
+Appointment Booking:
+
+When a user clicks on an available slot, open a booking form to capture additional details (e.g., patient name, appointment type, notes).
+
+On submission, the app should send a request to the backend to book the
+
+appointment.
+
+Appointment Management:
+
+List the user's upcoming appointments.
+
+Allow users to edit or cancel an appointment.
+
+2. State Management & API Integration:
+
+
+
+Use state management (React state or a library like Redux) to manage the list of doctors, available slots, and appointments.
+
+Implement proper loading states and error handling when interacting with the API.
+
+3. UI/UX Considerations:
+
+
+
+The design can be minimal but should be intuitive.
+
+Use Ul libraries (e.g., Material-UI, Bootstrap) if desired to speed up development.
+
+Deliverables
+
+A Git repository (e.g., on GitHub) containing:
+
+A README.md file with:
+
+Installation and run instructions for both the backend and frontend.
+
+A summary of any assumptions or design decisions made. Organized and well-documented code for both the backend and frontend.
+
+Ensure the project is runnable locally with clear instructions.
+
+Evaluation Criteria
+
+Functionality: Does the application work as expected? In particular, does it correctly compute.
+
+available time slots and prevent booking conflicts?
+
+Code Quality: is the code clean, well-organized, and maintainable?
+
+Problem Solving: How well does the candidate handle time calculations and slot management?
+
+Are edge cases considered (e.g., overlapping appointments)?
+
+• Error Handling: Are errors handled gracefully on both the client and server sides?
+
+API Integration & UX: Does the front end effectively interact with the backend API and provide a
+
+good user experience?
+
+Documentation: Are setup instructions and code comments clear and helpful?
+
+Additional Notes
+
+Scope & Time Management: This assignment is intended to be more challenging than a basic CRUD app but should still be manageable within roughly one day. Focus on getting the core functionality working.
+
+Assumptions: You can assume user authentication isn't required for this assignment.
+
+Optional Enhancements:
+
+Implement real-time updates for slot availability.
+
+Enhance the calendar view (e.g., using a third-party calendar component).
+
+• Add more detailed validations or error messages.
+
